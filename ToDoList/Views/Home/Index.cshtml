@@ -1,0 +1,112 @@
+﻿@model IEnumerable<ToDo>
+@{
+    ViewData["Title"] = "To-do list";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <form asp-action="Filter" method="post">
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select name="filter" class="form-select" asp-items="@(new SelectList(ViewBag.Statuses, "StatusId", "Name", ViewBag.Filters.StatusId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Due:</label>
+                <select name="filter" class="form-select" asp-items="@(new SelectList(ViewBag.DueFilters, "Key", "Value", ViewBag.Filters.Due))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Index" asp-route-id="" class="btn btn-primary">Clear</a>
+        </form>
+    </div>
+
+
+<div class="col-md-10">
+        <form asp-action="UpdateStatus" method="post" asp-route-id="@ViewBag.Filters.FilterString">
+        <table class="table table-bordered table-striped mt-2">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Sprint</th>
+                    <th>Point Value</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th class="w-25"></th>
+                </tr>
+            </thead>
+            <tbody>
+                    @foreach (ToDo task in Model)
+                    {
+                        string overdue = task.Overdue ? "bg-warning" : "";
+                        <tr>
+                            <td>@task.Name</td>
+                            <td>@task.Description</td>
+                            <td>@task.SprintNumber</td>
+                            <td>@task.PointValue</td>
+                            <td class="@overdue">@task.DueDate?.ToShortDateString()</td>
+                            <td class="@overdue">@task.Status.Name</td>
+                            <td class="col-md-6">
+                                @if (task.StatusID == "to do")
+                                {
+                                    <form asp-action="UpdateStatus" asp-route-id="@task.Id" method="post">
+                                        
+                                        <input type="hidden" name="id" value="@task.Id" />
+
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="in progress">Mark as In Progress</button>
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="quality assurance">Send to QA</button>
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="done">Mark as Complete</button>
+                                       
+                                    </form>
+                                }
+                           
+                            
+                                @if (task.StatusID == "in progress")
+                                {
+                                    <form asp-action="UpdateStatus" asp-route-id="@task.Id" method="post">
+                                        <input type="hidden" name="id" value="@task.Id" />
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="to do">Mark as to do</button>
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="quality assurance">Send to QA</button>
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="done">Mark as Complete</button>
+                                    </form>
+                                }
+                            
+                            
+                                @if (task.StatusID == "quality assurance")
+                                {
+                                    <form asp-action="UpdateStatus" asp-route-id="@task.Id" method="post">
+                                        <input type="hidden" name="id" value="@task.Id" />
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="to do">Mark as to do</button>
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="in progress">Send to QA</button>
+                                        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="done">Mark as Complete</button>
+                                    </form>
+                                }
+                           
+                           
+                                @if (task.StatusID == "done")
+                                {
+                                    <form asp-action="UpdateStatus" asp-route-id="@task.Id" method="post">
+                                        <input type="hidden" name="id" value="@task.Id" />
+                                        <div class="row">
+                                            <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="to do">Mark as to do</button>
+                                            <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="in progress">Mark as In Progress</button>
+                                            <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="in progress">Send to QA</button>
+                                            </div>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+            </tbody>
+        </table>
+    </form>
+
+    <form asp-action="DeleteComplete" method="post" asp-route-id="@ViewBag.Filters.FilterString">
+        <a asp-action="Add" class="btn btn-primary">Add new task</a>
+        <button type="submit" class="btn btn-primary">Delete compeleted tasks</button>
+    </form>
+</div>
+</div>
