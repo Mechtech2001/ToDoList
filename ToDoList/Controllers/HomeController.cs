@@ -8,7 +8,7 @@ namespace ToDoList.Controllers
 {
     public class HomeController : Controller
     {
-        private ToDoContext context;
+        private ToDoContext context { get; set; }
         public HomeController(ToDoContext context)
         {
             this.context = context;

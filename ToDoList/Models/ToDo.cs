@@ -16,7 +16,7 @@ namespace ToDoList.Models
         [Required(ErrorMessage = "Please enter sprint number for task.")]
         public int? SprintNumber { get; set; } = null!;
         [Required(ErrorMessage = "Please enter the point value for the task.")]
-        [[Range(0 , 250, ErrorMessage ="Pleaes enter a point value between 0 and 250.")]]
+        [Range(0 , 250, ErrorMessage ="Please enter a point value between 0 and 250.")]
         public int? PointValue { get; set; } = null!;
         [Required(ErrorMessage = "Please select a status.")]
         public string StatusID { get; set; } = string.Empty;
