@@ -1,0 +1,29 @@
+﻿@model ToDoList.Models.ToDo
+
+<form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    @if (Model.StatusID == "to do")
+    {
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="in progress">Mark as In Progress</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="quality assurance">Send to QA</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="done">Mark as Complete</button>
+    }
+    else if (Model.StatusID == "in progress")
+    {
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="to do">Mark as To Do</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="quality assurance">Send to QA</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="done">Mark as Complete</button>
+    }
+    else if (Model.StatusID == "quality assurance")
+    {
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="to do">Mark as To Do</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="in progress">Mark as In Progress</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="done">Mark as Complete</button>
+    }
+    else if (Model.StatusID == "done")
+    {
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="to do">Mark as To Do</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="in progress">Mark as In Progress</button>
+        <button type="submit" class="btn btn-primary btn-sm mx-3 mb-sm-3" name="action" value="quality assurance">Send to QA</button>
+    }
+</form>
